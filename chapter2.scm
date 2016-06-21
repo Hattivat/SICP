@@ -142,7 +142,7 @@
 ;exercise 2.8
 (define (sub-interval x y)
   (make-interval (- (lower-bound x) (upper-bound y))
-                 (- (ipper-bound x) (lower-bound y))))
+                 (- (upper-bound x) (lower-bound y))))
 
 ;exercise 2.9
 (define (width-interval interval)
@@ -150,11 +150,11 @@
 
 ;exercise 2.10
 (define (div-interval-upg x y)
-  (if (or (= 0 (lower-bound y)) (= 0 (upper-bound y)))
-      (display 'Error!)
+  (if (> (* (lower-bound y) (upper-bound y)) 0)
       (mul-interval x
                     (make-interval (/ 1.0 (upper-bound y))
-                                   (/ 1.0 (lower-bound y))))))
+                                   (/ 1.0 (lower-bound y))))
+      (display 'Error!)))
 
 ;exercise 2.11
 (define (mul-interval-ben x y)
@@ -193,4 +193,12 @@
 (define (percent interval)
   (* 100 (/ (- (upper-bound interval) (lower-bound interval) 2.0))))
 
-;exercise 2.13
+(define (par1 r1 r2)
+  (div-interval (mul-interval r1 r2)
+                (add-interval r1 r2)))
+
+(define (par2 r1 r2)
+  (let ((one (make-interval 1 1)))
+    (div-interval one
+                  (add-interval (div-interval one r1)
+                                (div-interval one r2)))))
