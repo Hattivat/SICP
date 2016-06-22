@@ -202,3 +202,20 @@
     (div-interval one
                   (add-interval (div-interval one r1)
                                 (div-interval one r2)))))
+
+;exercise 2.17
+(define (last-pair l)
+  (if (null? (cdr l))
+      l
+      (last-pair (cdr l))))
+
+;exercise 2.18
+(define (reverse l)
+  (define (rev-inner l res)
+    (if (null? l)
+        res
+        (rev-inner (cdr l) (cons (car l) res))))
+  (rev-inner l '()))
+
+;exercise 2.19
+(define 

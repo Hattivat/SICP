@@ -102,3 +102,34 @@
                   (func x)
                   #f)))
 
+;week 4
+(define (+rat a b)
+    (make-rational (+ (numerator a) (numerator b)) (+ (denominator a) (denominator b))))
+
+(define (substitute l old new)
+  (if (eqv? l old)
+      new
+      (if (and (list? l) (not (null? l)))
+          (cons (substitute (car l) old new) (substitute (cdr l) old new))
+          l)))
+
+(define (substitute2 l old new)
+  (define (test-word x o n)
+    (if (null? o)
+        x
+        (if (eqv? (car o) x)
+            (car n)
+            (test-word x (cdr o) (cdr n)))))
+  (if (and (list? l) (not (null? l)))
+      (cons (substitute2 (car l) old new) (substitute2 (cdr l) old new))
+      (test-word l old new)))
+
+(define (cxr-function w)
+  (define (inner w x)
+    (cond ((eqv? (first w) 'c) (inner (bf w) x))
+          ((eqv? (first w) 'a) (car (inner (bf w) x)))
+          ((eqv? (first w) 'd) (cdr (inner (bf w) x)))
+          ((eqv? (first w) 'r) x)
+          (else (display 'Error!))))
+  (lambda (x) (inner w x)))
+        
