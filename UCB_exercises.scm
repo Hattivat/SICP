@@ -132,4 +132,3 @@
           ((eqv? (first w) 'r) x)
           (else (display 'Error!))))
   (lambda (x) (inner w x)))
-        
