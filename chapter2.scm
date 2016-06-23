@@ -241,8 +241,24 @@
 
 ;exercise 2.20
 (define (same-parity x . y)
-  (if (and (not (null? y)) (list? y))
-      (cons (same-parity x . (car y)) (same-parity x . (cdr y)))
-      (if (= (modulo x 2) (modulo y 2))
-          y
-          '())))
+  (define (inner-sp x y)
+    (if (null? y)
+        y
+        (if (= (modulo (car y) 2) (modulo x 2))
+            (cons (car y) (inner-sp x (cdr y)))
+            (inner-sp x (cdr y)))))
+  (inner-sp x y))
+
+;exerice 2.21
+(define (square-list items)
+  (if (null? items)
+      nil
+      (cons (* (car items) (car items)) (square-list (cdr items)))))
+(define (square-list-map items)
+  (map (lambda (x) (* x x)) items))
+
+;exercise 2.23
+(define (for-each proc lst)
+  (if (null? lst)
+      (newline)
+      (and (proc (car lst)) (for-each proc (cdr lst)))))
