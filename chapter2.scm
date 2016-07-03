@@ -262,3 +262,14 @@
   (if (null? lst)
       (newline)
       (and (proc (car lst)) (for-each proc (cdr lst)))))
+
+(define (count-leaves x)
+  (cond ((null? x) 0)
+        ((not (pair? x)) 1)
+        (else (+ (count-leaves (car x))
+                 (count-leaves (cdr x))))))
+
+;exercise 2.25
+(car (cdr (car (cdr (cdr l)))))
+(car (car l))
+(car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr l))))))))))))
