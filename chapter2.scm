@@ -270,6 +270,15 @@
                  (count-leaves (cdr x))))))
 
 ;exercise 2.25
-(car (cdr (car (cdr (cdr l)))))
-(car (car l))
-(car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr l))))))))))))
+;(car (cdr (car (cdr (cdr l)))))
+;(car (car l))
+;(car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr l))))))))))))
+
+;exercise 2.27
+(define (deep-reverse lst)
+  (define (dr-inner l res)
+    (cond ((null? l) res)
+          ((pair? (car l)) (dr-inner (cdr l) (cons (dr-inner (car l) '()) res)))
+          (else (dr-inner (cdr l) (cons (car l) res)))))
+  (dr-inner lst '()))
+(define abc (list (list 1 2) (list 3 4)))
