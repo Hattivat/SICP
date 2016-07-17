@@ -324,3 +324,44 @@
   (and (= (torque (left-branch mobile)) (torque (right-branch mobile)))
        (if (number? (branch-structure (left-branch mobile))) #t (balanced? left))
        (if (number? (branch-structure (right-branch mobile))) #t (balanced? right))))
+
+(define (scale-tree1 tree factor)
+  (cond ((null? tree) '())
+        ((not (pair? tree)) (* tree factor))
+        (else (cons (scale-tree1 (car tree) factor)
+                    (scale-tree1 (cdr tree) factor)))))
+
+(define (scale-tree tree factor)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (scale-tree sub-tree factor)
+             (* sub-tree factor)))
+       tree))
+
+;exercise 2.30
+(define (square-tree-map tree)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (square-tree-map sub-tree)
+             (* sub-tree sub-tree)))
+       tree))
+(define (square-tree tree)
+  (cond ((null? tree) '())
+        ((not (pair? tree)) (* tree tree))
+        (else (cons (square-tree (car tree))
+                    (square-tree (cdr tree))))))
+
+;exercise 2.31
+(define (tree-map f tree)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
+             (tree-map sub-tree)
+             (f sub-tree)))
+       tree))
+
+;exercise 2.32
+(define (subsets s)
+  (if (null? s)
+      (list nil)
+      (let ((rest (subsets (cdr s))))
+        (append rest (map 'your-answer-here rest)))))
