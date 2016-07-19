@@ -366,3 +366,23 @@
       (let ((rest (subsets (cdr s))))
         (append rest (map (lambda (x) (cons (car s) x))
                             rest)))))
+
+(define (accumulate2 op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
+
+;exercise 2.33
+(define (map-wtf p sequence)
+  (accumulate2 (lambda (x y) (cons (p x) y)) '() sequence))
+(define (append-wtf seq1 seq2)
+  (accumulate2 cons seq2 seq1))
+(define (length-wtf sequence)
+  (accumulate2 (lambda (x y) (+ y 1)) 0 sequence))
+
+;exercise 2.34
+(define (horner-eval x coefficient-sequence)
+  (accumulate2 (lambda (this-coeff higher-terms) (cons ()
+              0
+              coefficient-sequence))
