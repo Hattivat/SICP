@@ -371,7 +371,7 @@
   (if (null? sequence)
       initial
       (op (car sequence)
-          (accumulate op initial (cdr sequence)))))
+          (accumulate2 op initial (cdr sequence)))))
 
 ;exercise 2.33
 (define (map-wtf p sequence)
@@ -383,6 +383,6 @@
 
 ;exercise 2.34
 (define (horner-eval x coefficient-sequence)
-  (accumulate2 (lambda (this-coeff higher-terms) (cons ()
-              0
-              coefficient-sequence))
+  (accumulate2 (lambda (this-coeff higher-terms) (+ this-coeff (* x higher-terms)))
+               0
+               coefficient-sequence))
