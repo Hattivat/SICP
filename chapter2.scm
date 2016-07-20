@@ -263,12 +263,6 @@
       (newline)
       (and (proc (car lst)) (for-each proc (cdr lst)))))
 
-(define (count-leaves x)
-  (cond ((null? x) 0)
-        ((not (pair? x)) 1)
-        (else (+ (count-leaves (car x))
-                 (count-leaves (cdr x))))))
-
 ;exercise 2.25
 ;(car (cdr (car (cdr (cdr l)))))
 ;(car (car l))
@@ -386,3 +380,23 @@
   (accumulate2 (lambda (this-coeff higher-terms) (+ this-coeff (* x higher-terms)))
                0
                coefficient-sequence))
+
+(define (count-leaves x)
+  (cond ((null? x) 0)
+        ((not (pair? x)) 1)
+        (else (+ (count-leaves (car x))
+                 (count-leaves (cdr x))))))
+
+;exercise 2.35
+(define (count-leaves2 atree)
+  (accumulate2 (lambda (x y) (cond ((null? x) y)
+                                   ((not (pair? x)) (+ y 1))
+                                   (else (+ y (count-leaves2 x)))))
+               0
+               atree))
+(define (count-leaves3 atree)
+  (accumulate2 (lambda (x y) (+ x y))
+               0
+               (map (lambda (sub-tr) (if (pair? sub-tr)
+                                         (count-leaves3 sub-tr)
+                                         1)) atree)))
