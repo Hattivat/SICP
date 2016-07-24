@@ -411,8 +411,17 @@
 (define (dot-product v w)
   (accumulate2 + 0 (map * v w)))
 
+(define amatrix '((1 2 3) (4 5 6) (7 8 9)))
+
 ;exercise 2.37
-(define (matrix-*-vector m v)
+(define (matrix-*-vector-bad m v)
   (if (empty? m)
       '()
-      (cons (dot-product (car m) v) (matrix-*-vector (cdr m) v))))
+      (cons (dot-product (car m) v) (matrix-*-vector-bad (cdr m) v))))
+(define (matrix-*-vector m v)
+  (map (lambda (x) (dot-product x v)) m))
+(define (transpose mat)
+  (accumulate-n cons '() mat))
+(define (matrix-*-matrix m n)
+  (let ((cols (transpose n)))
+    (map (lambda (x) (matrix-*-vector cols x)) m)))
