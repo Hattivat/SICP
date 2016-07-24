@@ -405,5 +405,14 @@
 (define (accumulate-n op init seqs)
   (if (null? (car seqs))
       '()
-      (cons (accumulate op init (map car seqs))
+      (cons (accumulate2 op init (map car seqs))
             (accumulate-n op init (map cdr seqs)))))
+
+(define (dot-product v w)
+  (accumulate2 + 0 (map * v w)))
+
+;exercise 2.37
+(define (matrix-*-vector m v)
+  (if (empty? m)
+      '()
+      (cons (dot-product (car m) v) (matrix-*-vector (cdr m) v))))
