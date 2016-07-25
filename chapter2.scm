@@ -443,13 +443,6 @@
 ;(((() 1) 2) 3)
 ;Commutativity
 
-(define (reverse l)
-  (define (rev-inner l res)
-    (if (null? l)
-        res
-        (rev-inner (cdr l) (cons (car l) res))))
-  (rev-inner l '()))
-
 ;exercise 2.39
 (define (reverse-r sequence)
   (fold-right (lambda (x y) (append y (list x))) '() sequence))
