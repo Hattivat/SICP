@@ -425,3 +425,33 @@
 (define (matrix-*-matrix m n)
   (let ((cols (transpose n)))
     (map (lambda (x) (matrix-*-vector cols x)) m)))
+
+(define (fold-left op initial sequence)
+  (define (iter result rest)
+    (if (null? rest)
+        result
+        (iter (op result (car rest))
+              (cdr rest))))
+  (iter initial sequence))
+
+(define fold-right accumulate2)
+
+;exercise 2.38
+;3/2
+;1/6
+;(1 (2 (3 ())))
+;(((() 1) 2) 3)
+;Commutativity
+
+(define (reverse l)
+  (define (rev-inner l res)
+    (if (null? l)
+        res
+        (rev-inner (cdr l) (cons (car l) res))))
+  (rev-inner l '()))
+
+;exercise 2.39
+(define (reverse-r sequence)
+  (fold-right (lambda (x y) (append y (list x))) '() sequence))
+(define (reverse-l sequence)
+  (fold-left (lambda (x y) (cons y x)) '() sequence))
