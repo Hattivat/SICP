@@ -503,3 +503,32 @@
 (define (ordered-triplets n s)
        (filter (lambda (x) (= (accumulate + x) s))
                (unique-triples n)))
+
+(define (queens board-size)
+  (define (queen-cols k)
+    (if (= k 0)
+        (list empty-board)
+        (filter
+         (lambda (positions) (safe? k positions))
+         (flatmap
+          (lambda (rest-of-queens)
+            (map (lambda (new-row)
+                   (adjoin-position new-row k rest-of-queens))
+                 (enumerate-interval 1 board-size)))
+          (queen-cols (- k 1))))))
+  (queen-cols board-size))
+
+;exercise 2.42
+(define empty-board '())
+(define (adjoin-position new-row k rest-of-queens)
+  (append (list new-row) rest-of-queens))
+(define (safe? k positions)
+  (define (inner-safe tested poss)
+    (if (empty? poss)
+        #t
+        (if (or (= tested (car poss))
+                (= tested (+ (- k (length poss)) (car poss)))
+                (= tested (- (car poss) (- k (length poss)))))
+            #f
+            (inner-safe tested (cdr poss)))))
+  (inner-safe (car positions) (cdr positions)))
