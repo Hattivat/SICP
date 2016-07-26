@@ -532,3 +532,8 @@
             #f
             (inner-safe tested (cdr poss)))))
   (inner-safe (car positions) (cdr positions)))
+
+;exercise 2.43
+;It is O(n^n) instead of O(n^2), so it will execute in T^(n-2)
+
+;section 2.2.4 in "project2.scm"
