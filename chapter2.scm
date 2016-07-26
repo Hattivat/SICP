@@ -448,3 +448,58 @@
   (fold-right (lambda (x y) (append y (list x))) '() sequence))
 (define (reverse-l sequence)
   (fold-left (lambda (x y) (cons y x)) '() sequence))
+
+(define (flatmap proc seq)
+  (accumulate2 append '() (map proc seq)))
+
+(define (prime-sum? pair)
+  (prime? (+ (car pair) (cadr pair))))
+
+(define (make-pair-sum pair)
+  (list (car pair) (cadr pair) (+ (car pair) (cadr pair))))
+
+(define (enumerate-interval low high)
+  (if (> low high)
+      '()
+      (cons low (enumerate-interval (+ low 1) high))))
+
+(define (prime-sum-pairs n)
+  (map make-pair-sum
+       (filter prime-sum?
+               (flatmap
+                (lambda (i)
+                  (map (lambda (j) (list i j))
+                       (enumerate-interval 1 (- i 1))))
+                (enumerate-interval 1 n)))))
+
+(define (remove item sequence)
+  (filter (lambda (x) (not (= x item)))
+          sequence))
+
+(define (permutations s)
+  (if (null? s)                    ; empty set?
+      (list '())                   ; sequence containing empty set
+      (flatmap (lambda (x)
+                 (map (lambda (p) (cons x p))
+                      (permutations (remove x s))))
+               s)))
+
+;exercise 2.40
+(define (unique-pairs n)
+  (flatmap (lambda (i) (map (lambda (j) (list i j))
+                            (enumerate-interval 1 (- i 1))))
+                (enumerate-interval 1 n)))
+(define (prime-sum-pairs-better n)
+  (map make-pair-sum
+       (filter prime-sum?
+               (unique-pairs n))))
+
+;exercise 2.41
+(define (unique-triples n)
+  (flatmap (lambda (i) (flatmap (lambda (j) (map (lambda (k) (list i j k))
+                                                             (enumerate-interval 1 (- j 1))))
+                            (enumerate-interval 1 (- i 1))))
+                (enumerate-interval 1 n)))
+(define (ordered-triplets n s)
+       (filter (lambda (x) (= (accumulate + x) s))
+               (unique-triples n)))
