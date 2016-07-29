@@ -73,3 +73,22 @@
   (make-vect (* scal (xcor-vect vect))
              (* scal (ycor-vect vect))))
 
+(define (make-frame origin edge1 edge2)
+  (list origin edge1 edge2))
+
+(define (make-frame2 origin edge1 edge2)
+  (cons origin (cons edge1 edge2)))
+
+;exercise 2.47
+(define (edge-one frame)
+  (car (cdr frame)))
+(define (edge-two frame)
+  (car (cdr (cdr frame))))
+(define (frame-origin frame)
+  (car frame))
+(define (edge-one2 frame)
+  (car (cdr frame)))
+(define (edge-two2 frame)
+  (cdr (cdr frame)))
+(define (frame-origin2 frame)
+  (car frame))
