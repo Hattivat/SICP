@@ -31,6 +31,15 @@
           (bottom (beside (bl painter) (br painter))))
       (below bottom top))))
 
+(define (frame-coord-map frame)
+  (lambda (v)
+    (add-vect
+     (origin-frame frame)
+     (add-vect (scale-vect (xcor-vect v)
+                           (edge1-frame frame))
+               (scale-vect (ycor-vect v)
+                           (edge2-frame frame))))))
+
 ;exercise 2.44
 (define (up-split painter n)
   (if (= n 0)
@@ -46,3 +55,21 @@
         (let ((smaller (split-inner painter (- n 1))))
           (op1 painter (op2 smaller smaller)))))
   split-inner)
+
+;exercise 2.46
+(define (make-vect x y)
+  (cons x y))
+(define (xcor-vect vect)
+  (car vect))
+(define (ycor-vect vect)
+  (cdr vect))
+(define (add-vect v1 v2)
+  (make-vect (+ (xcor-vect v1) (xcor-vect v2))
+             (+ (ycor-vect v1) (ycor-vect v2))))
+(define (sub-vect v1 v2)
+  (make-vect (- (xcor-vect v1) (xcor-vect v2))
+             (- (ycor-vect v1) (ycor-vect v2))))
+(define (scale-vect vect scal)
+  (make-vect (* scal (xcor-vect vect))
+             (* scal (ycor-vect vect))))
+
