@@ -40,6 +40,26 @@
                (scale-vect (ycor-vect v)
                            (edge2-frame frame))))))
 
+(define (make-frame origin edge1 edge2)
+  (list origin edge1 edge2))
+
+(define (make-frame2 origin edge1 edge2)
+  (cons origin (cons edge1 edge2)))
+
+(define (for-each proc lst)
+  (if (null? lst)
+      (newline)
+      (and (proc (car lst)) (for-each proc (cdr lst)))))
+
+(define (segments->painter segment-list)
+  (lambda (frame)
+    (for-each
+     (lambda (segment)
+       (draw-line
+        ((frame-coord-map frame) (start-segment segment))
+        ((frame-coord-map frame) (end-segment segment))))
+     segment-list)))
+
 ;exercise 2.44
 (define (up-split painter n)
   (if (= n 0)
@@ -73,12 +93,6 @@
   (make-vect (* scal (xcor-vect vect))
              (* scal (ycor-vect vect))))
 
-(define (make-frame origin edge1 edge2)
-  (list origin edge1 edge2))
-
-(define (make-frame2 origin edge1 edge2)
-  (cons origin (cons edge1 edge2)))
-
 ;exercise 2.47
 (define (edge-one frame)
   (car (cdr frame)))
@@ -92,3 +106,13 @@
   (cdr (cdr frame)))
 (define (frame-origin2 frame)
   (car frame))
+
+;exercise 2.48
+(define (make-segment v1 v2)
+  (cons v1 v2))
+(define (start-segment v)
+  (car v))
+(define (end-segment v)
+  (cdr v))
+
+;exercise 2.49
