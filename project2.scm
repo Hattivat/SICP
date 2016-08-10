@@ -196,3 +196,37 @@
                            (make-segment (make-vect 0.75 0.65) (make-vect 0.65 0.65))
                            (make-segment (make-vect 0.65 0.65) (make-vect 0.7 0.8))
                            (make-segment (make-vect 0.7 0.8) (make-vect 0.65 1)))))
+
+;exercise 2.50
+(define (flip-horiz painter)
+  (transform-painter painter
+                     (make-vect 1.0 0.0)
+                     (make-vect 0.0 0.0)
+                     (make-vect 1.0 1.0)))
+(define (rotate180 painter)
+  (transform-painter painter
+                     (make-vect 1.0 1.0)
+                     (make-vect 0.0 1.0)
+                     (make-vect 1.0 0.0)))
+(define (rotate270 painter)
+  (transform-painter painter
+                     (make-vect 0.0 1.0)
+                     (make-vect 0.0 0.0)
+                     (make-vect 0.0 0.0)))
+
+;exercise 2.51
+(define (below painter1 painter2)
+  (let ((split-point (make-vect 0.0 0.5)))
+    (let ((paint-bottom
+           (transform-painter painter1
+                              (make-vect 0.0 0.0)
+                              (make-vect 1.0 0.0)
+                              split-point))
+          (paint-up
+           (transform-painter painter2
+                              split-point
+                              (make-vect 1.0 0.5)
+                              (make-vect 0.0 1.0))))
+      (lambda (frame)
+        (paint-bottom frame)
+        (paint-up frame)))))
