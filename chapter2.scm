@@ -551,3 +551,13 @@
 ;#f
 ;#f
 ;#t
+
+;exercise 2.54
+(define (equal? x y)
+  (cond ((or (null? x) (null? y)) (if (and (null? x) (null? y))
+                                      #t
+                                      #f))
+        ((and (list? x) (list? y)) (if (equal? (car x) (car y))
+                                       (equal? (cdr x) (cdr y))
+                                       #f))
+        (else (eq? x y))))
