@@ -565,22 +565,6 @@
 ;exercise 2.55
 ;car of a list (quote abracadabra) yields quote.
 
-(define (deriv exp var)
-  (cond ((number? exp) 0)
-        ((variable? exp)
-         (if (same-variable? exp var) 1 0))
-        ((sum? exp)
-         (make-sum (deriv (addend exp) var)
-                   (deriv (augend exp) var)))
-        ((product? exp)
-         (make-sum
-           (make-product (multiplier exp)
-                         (deriv (multiplicand exp) var))
-           (make-product (deriv (multiplier exp) var)
-                         (multiplicand exp))))
-        (else
-         (error "unknown expression type -- DERIV" exp))))
-
 (define (variable? x) (symbol? x))
 
 (define (same-variable? v1 v2)
@@ -617,3 +601,31 @@
 (define (multiplicand p) (caddr p))
 
 ;exercise 2.56
+(define (deriv exp var)
+  (cond ((number? exp) 0)
+        ((variable? exp)
+         (if (same-variable? exp var) 1 0))
+        ((sum? exp)
+         (make-sum (deriv (addend exp) var)
+                   (deriv (augend exp) var)))
+        ((product? exp)
+         (make-sum
+           (make-product (multiplier exp)
+                         (deriv (multiplicand exp) var))
+           (make-product (deriv (multiplier exp) var)
+                         (multiplicand exp))))
+        ((exponentiation? exp)
+         (make-product (make-product (exponent exp)
+                                     (make-exponentiation (base exp)
+                                                          (- (exponent exp) 1)))
+                       (deriv (base exp) var)))
+        (else
+         (error "unknown expression type -- DERIV" exp))))
+(define (base x) (cadr x))
+(define (exponent x) (caddr x))
+(define (make-exponentiation b e)
+  (cond ((=number? e 0) 1)
+        ((=number? e 1) b)
+        (else (list '** b e))))
+(define (exponentiation? x)
+  (and (pair? x) (eq? (car x) '**)))
