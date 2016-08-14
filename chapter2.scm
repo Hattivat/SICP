@@ -626,6 +626,7 @@
 (define (make-exponentiation b e)
   (cond ((=number? e 0) 1)
         ((=number? e 1) b)
+        ((=number? b 1) 1)
         (else (list '** b e))))
 (define (exponentiation? x)
   (and (pair? x) (eq? (car x) '**)))
