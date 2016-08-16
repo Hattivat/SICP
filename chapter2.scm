@@ -694,3 +694,20 @@
          (cons (car set1)
                (union-set (cdr set1) set2)))
         (else (union-set (cdr set1) set2))))
+
+;exercise 2.60
+;element-of-set? stays the same.
+(define (adjoin-set2 x set)
+  (cons x set))
+(define (union-set2 set1 set2)
+  (append set1 set2))
+(define (remove-element set x)
+  (if (= x (car set))
+      (cdr set)
+      (cons (car set) (remove-element (cdr set) x))))
+(define (intersection-set2 set1 set2)
+  (cond ((or (null? set1) (null? set2)) '())
+        ((element-of-set? (car set1) set2)
+         (cons (car set1)
+               (intersection-set2 (cdr set1) (remove-element (car set1) set2))))
+        (else (intersection-set2 (cdr set1) set2))))
