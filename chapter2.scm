@@ -738,3 +738,30 @@
         ((element-of-set? x set) set)
         ((> x (car set)) (cons (car set) (adjoin-set x (cdr set))))
         ((< x (car set)) (cons x set))))
+
+;exercise 2.62
+(define (union-set set1 set2)
+  (let ((x1 (car set1)) (x2 (car set2)))
+    (cond ((null? set1) set2)
+          ((null? set2) set1)
+          ((= x1 x2) (cons x1 (union-set (cdr set1) (cdr set2))))
+          ((< x1 x2) (cons x1 (union-set (cdr set1) set2)))
+          ((> x1 x2) (cons x2 (union-set set1 (cdr set2)))))))
+
+(define (entry tree) (car tree))
+
+(define (left-branch tree) (cadr tree))
+
+(define (right-branch tree) (caddr tree))
+
+(define (make-tree entry left right)
+  (list entry left right))
+
+(define (element-of-set? x set)
+  (cond ((null? set) false)
+        ((= x (entry set)) true)
+        ((< x (entry set))
+         (element-of-set? x (left-branch set)))
+        ((> x (entry set))
+         (element-of-set? x (right-branch set)))))
+
