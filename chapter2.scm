@@ -795,3 +795,5 @@
   (copy-to-list tree '()))
 
 ;exercise 2.63
+;The two procedures produce the same results.
+;The first procedure is O(n*logn), the second is O(n)
