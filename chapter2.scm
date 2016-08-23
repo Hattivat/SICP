@@ -713,40 +713,40 @@
         (else (intersection-set2 (cdr set1) set2))))
 
 ;ordered sets
-(define (element-of-set? x set)
+(define (ord-element-of-set? x set)
   (cond ((null? set) false)
         ((= x (car set)) true)
         ((< x (car set)) false)
-        (else (element-of-set? x (cdr set)))))
+        (else (ord-element-of-set? x (cdr set)))))
 
-(define (intersection-set set1 set2)
+(define (ord-intersection-set set1 set2)
   (if (or (null? set1) (null? set2))
       '()
       (let ((x1 (car set1)) (x2 (car set2)))
         (cond ((= x1 x2)
                (cons x1
-                     (intersection-set (cdr set1)
-                                       (cdr set2))))
+                     (ord-intersection-set (cdr set1)
+                                           (cdr set2))))
               ((< x1 x2)
-               (intersection-set (cdr set1) set2))
+               (ord-intersection-set (cdr set1) set2))
               ((< x2 x1)
-               (intersection-set set1 (cdr set2)))))))
+               (ord-intersection-set set1 (cdr set2)))))))
 
 ;exercise 2.61
-(define (adjoin-set x set)
+(define (ord-adjoin-set x set)
   (cond ((null? set) (cons x '()))
-        ((element-of-set? x set) set)
-        ((> x (car set)) (cons (car set) (adjoin-set x (cdr set))))
+        ((ord-element-of-set? x set) set)
+        ((> x (car set)) (cons (car set) (ord-adjoin-set x (cdr set))))
         ((< x (car set)) (cons x set))))
 
 ;exercise 2.62
-(define (union-set set1 set2)
+(define (ord-union-set set1 set2)
   (let ((x1 (car set1)) (x2 (car set2)))
     (cond ((null? set1) set2)
           ((null? set2) set1)
-          ((= x1 x2) (cons x1 (union-set (cdr set1) (cdr set2))))
-          ((< x1 x2) (cons x1 (union-set (cdr set1) set2)))
-          ((> x1 x2) (cons x2 (union-set set1 (cdr set2)))))))
+          ((= x1 x2) (cons x1 (ord-union-set (cdr set1) (cdr set2))))
+          ((< x1 x2) (cons x1 (ord-union-set (cdr set1) set2)))
+          ((> x1 x2) (cons x2 (ord-union-set set1 (cdr set2)))))))
 
 (define (entry tree) (car tree))
 
@@ -757,25 +757,25 @@
 (define (make-tree entry left right)
   (list entry left right))
 
-(define (element-of-set? x set)
+(define (tr-element-of-set? x set)
   (cond ((null? set) false)
         ((= x (entry set)) true)
         ((< x (entry set))
-         (element-of-set? x (left-branch set)))
+         (tr-element-of-set? x (left-branch set)))
         ((> x (entry set))
-         (element-of-set? x (right-branch set)))))
+         (tr-element-of-set? x (right-branch set)))))
 
-(define (adjoin-set x set)
+(define (tr-adjoin-set x set)
   (cond ((null? set) (make-tree x '() '()))
         ((= x (entry set)) set)
         ((< x (entry set))
          (make-tree (entry set)
-                    (adjoin-set x (left-branch set))
+                    (tr-adjoin-set x (left-branch set))
                     (right-branch set)))
         ((> x (entry set))
          (make-tree (entry set)
                     (left-branch set)
-                    (adjoin-set x (right-branch set))))))
+                    (tr-adjoin-set x (right-branch set))))))
 
 (define (tree->list-1 tree)
   (if (null? tree)
@@ -794,3 +794,4 @@
                                           result-list)))))
   (copy-to-list tree '()))
 
+;exercise 2.63
