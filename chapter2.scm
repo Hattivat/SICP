@@ -816,3 +816,6 @@
                     (remaining-elts (cdr right-result)))
                 (cons (make-tree this-entry left-tree right-tree)
                       remaining-elts))))))))
+
+;exercise 2.64
+
