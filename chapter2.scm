@@ -714,9 +714,9 @@
 
 ;ordered sets
 (define (ord-element-of-set? x set)
-  (cond ((null? set) false)
-        ((= x (car set)) true)
-        ((< x (car set)) false)
+  (cond ((null? set) #f)
+        ((= x (car set)) #t)
+        ((< x (car set)) #f)
         (else (ord-element-of-set? x (cdr set)))))
 
 (define (ord-intersection-set set1 set2)
@@ -758,8 +758,8 @@
   (list entry left right))
 
 (define (tr-element-of-set? x set)
-  (cond ((null? set) false)
-        ((= x (entry set)) true)
+  (cond ((null? set) #f)
+        ((= x (entry set)) #t)
         ((< x (entry set))
          (tr-element-of-set? x (left-branch set)))
         ((> x (entry set))
@@ -844,3 +844,14 @@
         (ordset2 (tree->list-2 set2)))
     (let ((ordset (ord-intersection-set ordset1 ordset2)))
       (list->tree ordset))))
+
+;exercise 2.66
+(define (lookup given-key set-of-records)
+  (if (null? set-of-records)
+      #f
+      (let ((tested-key (car (entry set-of-records))))
+        (cond ((= given-key tested-key) (entry set-of-records))
+              ((< given-key tested-key)
+               (lookup given-key (left-branch set-of-records)))
+              ((> given-key tested-key)
+               (lookup given-key (right-branch set-of-records)))))))
