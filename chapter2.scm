@@ -818,4 +818,17 @@
                       remaining-elts))))))))
 
 ;exercise 2.64
-
+;This procedure works by first taking the first half minus one (for entry point) of the given nr of
+;elements, and recursively calling itself on that set of elements to construct the left branch of the
+;tree, then saving the median element to be the tree's entry point, and again calling itself recursively
+;on the rest of the elements to create the right branch of the tree. Once it has both branches, it calls
+;make-tree providing it with the entry element it found and the branches it has constructed. Finally, it
+;creates and returns a pair with the constructed list as it first element, and the remainign elements
+;(or empty list if there are none) as the other.
+;The tree resulting from the example ordered list would be:
+;  5
+; / \
+;1   9
+; \  /\
+; 3 7 11
+;The order of growth for this procedure is O(n).
