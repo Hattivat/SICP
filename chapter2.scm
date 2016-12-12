@@ -937,4 +937,14 @@
 
 ;exercise 2.68
 (define (encode-symbol symbol tree)
-  zzzz)
+  (define (inner-encode symbol tree)
+    (cond ((leaf? tree)
+           '())
+          ((element-of-set? symbol (symbols (left-branch tree)))
+           (cons '0 (inner-encode symbol (left-branch tree))))
+          ((element-of-set? symbol (symbols (right-branch tree)))
+           (cons '1 (inner-encode symbol (right-branch tree))))))
+  (if (element-of-set? symbol (symbols tree))
+      (inner-encode symbol tree)
+      (error "Symbol not found! -- encode-symbol" symbol)))
+
