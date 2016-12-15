@@ -913,7 +913,7 @@
   (if (null? pairs)
       '()
       (let ((pair (car pairs)))
-        (htr-adjoin-set (make-leaf (car pair)    ; symbol
+        (adjoin-set (make-leaf (car pair)    ; symbol
                                (cadr pair))  ; frequency
                     (make-leaf-set (cdr pairs))))))
 
@@ -941,9 +941,9 @@
     (cond ((leaf? tree)
            '())
           ((element-of-set? symbol (symbols (left-branch tree)))
-           (cons '0 (inner-encode symbol (left-branch tree))))
+           (cons 0 (inner-encode symbol (left-branch tree))))
           ((element-of-set? symbol (symbols (right-branch tree)))
-           (cons '1 (inner-encode symbol (right-branch tree))))))
+           (cons 1 (inner-encode symbol (right-branch tree))))))
   (if (element-of-set? symbol (symbols tree))
       (inner-encode symbol tree)
       (error "Symbol not found! -- encode-symbol" symbol)))
@@ -953,7 +953,11 @@
 
 ;exercise 2.69
 (define (successive-merge leafset)
-  (if (null? (cdr leafset))
+  (if (= (length leafset) 1)
       (car leafset)
-      (successive-merge (adjoin-set (make-code-tree (car leafset) (cadr leafset))
+      (successive-merge (htr-adjoin-set (make-code-tree (car leafset) (cadr leafset))
                                     (cddr leafset)))))
+
+;exercise 2.70
+;the theoretical minimum for variable-length encoding is 87 bits.
+;for fixed-length encoding the minimum is 108 bits.
