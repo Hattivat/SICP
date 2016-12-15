@@ -948,3 +948,12 @@
       (inner-encode symbol tree)
       (error "Symbol not found! -- encode-symbol" symbol)))
 
+(define (generate-huffman-tree pairs)
+  (successive-merge (make-leaf-set pairs)))
+
+;exercise 2.69
+(define (successive-merge leafset)
+  (if (null? (cdr leafset))
+      (car leafset)
+      (successive-merge (adjoin-set (make-code-tree (car leafset) (cadr leafset))
+                                    (cddr leafset)))))
