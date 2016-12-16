@@ -962,8 +962,8 @@
 ;the theoretical minimum for variable-length encoding is 84 bits.
 ;for fixed-length encoding the minimum is 108 bits.
 
-(define test-tree (generate-huffman-tree '((A 3) (B 5) (C 6) (D 6))))
-(encode '(A B C D) test-tree) 
-(define rocktree (generate-huffman-tree '((a 2) (na 16) (boom 1) (sha 3) (get 2) (yip 9) (job 2) (wah 1))))
-(define rock-song '(get a job sha na na na na na na na na get a job sha na na na na na na na na wah yip yip yip yip yip yip yip yip yip sha boom))
-(define encoded-rock-song (encode rock-song rocktree))
+;exercise 2.71
+;In such a tree the most frequent symbol requires 1 bit, while the least frequent symbol requires n-1 bits.
+
+;exercise 2.72
+;The most common symbol is O(n), the least common one is O(n2).
