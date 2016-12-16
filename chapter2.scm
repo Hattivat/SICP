@@ -959,7 +959,7 @@
                                     (cddr leafset)))))
 
 ;exercise 2.70
-;the theoretical minimum for variable-length encoding is 87 bits.
+;the theoretical minimum for variable-length encoding is 84 bits.
 ;for fixed-length encoding the minimum is 108 bits.
 
 (define test-tree (generate-huffman-tree '((A 3) (B 5) (C 6) (D 6))))
