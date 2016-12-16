@@ -907,13 +907,13 @@
   (cond ((null? set) (list x))
         ((< (weight x) (weight (car set))) (cons x set))
         (else (cons (car set)
-                    (adjoin-set x (cdr set))))))
+                    (htr-adjoin-set x (cdr set))))))
 
 (define (make-leaf-set pairs)
   (if (null? pairs)
       '()
       (let ((pair (car pairs)))
-        (adjoin-set (make-leaf (car pair)    ; symbol
+        (htr-adjoin-set (make-leaf (car pair)    ; symbol
                                (cadr pair))  ; frequency
                     (make-leaf-set (cdr pairs))))))
 
@@ -961,3 +961,9 @@
 ;exercise 2.70
 ;the theoretical minimum for variable-length encoding is 87 bits.
 ;for fixed-length encoding the minimum is 108 bits.
+
+(define test-tree (generate-huffman-tree '((A 3) (B 5) (C 6) (D 6))))
+(encode '(A B C D) test-tree) 
+(define rocktree (generate-huffman-tree '((a 2) (na 16) (boom 1) (sha 3) (get 2) (yip 9) (job 2) (wah 1))))
+(define rock-song '(get a job sha na na na na na na na na get a job sha na na na na na na na na wah yip yip yip yip yip yip yip yip yip sha boom))
+(define encoded-rock-song (encode rock-song rocktree))
