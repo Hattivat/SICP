@@ -1070,3 +1070,9 @@
          (angle-polar (contents z)))
         (else (error "Unknown type -- ANGLE" z))))
 
+(define (make-from-real-imag x y)
+  (make-from-real-imag-rectangular x y))
+
+(define (make-from-mag-ang r a)
+  (make-from-mag-ang-polar r a))
+
