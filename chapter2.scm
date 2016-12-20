@@ -1159,7 +1159,20 @@
 (define (operands exp) (cdr exp))
 
 ;exercise 2.73
-; We can't assimilate the predicates number? and same-variable? into the data-directed dispatch because
+;We can't assimilate the predicates number? and same-variable? into the data-directed dispatch because
 ;of scoping - the information on whether a variable or a number was passed will be lost when it is passed
 ;further down the chain of functions.
-
+(define (install-sum-package)
+  (define (augend asum) (car asum))
+  (define (addend asum) (cdr asum))
+  (define (make-sum x y)
+    (cond ((and (number? x) (number? y)) (+ x y))
+          ((=number? x 0) y)
+          ((=number? y 0) x)
+          (else (list '+ x y))))
+  (define (sum-deriv exp var)
+    (make-sum (deriv (augend exp) var)
+              (deriv (addend exp) var)))
+  (put 'deriv 'sum sum-deriv)
+  ;interface to the rest of the system
+  (define (tag x) (attach-tag 'sum x))
