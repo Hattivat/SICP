@@ -1159,9 +1159,11 @@
 (define (operands exp) (cdr exp))
 
 ;exercise 2.73
+;A)
 ;We can't assimilate the predicates number? and same-variable? into the data-directed dispatch because
 ;of scoping - the information on whether a variable or a number was passed will be lost when it is passed
 ;further down the chain of functions.
+;B)
 (define (install-sum-package)
   (define (augend asum) (car asum))
   (define (addend asum) (cdr asum))
@@ -1189,6 +1191,7 @@
               (make-product (multiplier exp)
                             (deriv (multiplicand exp) var))))
   (put 'deriv 'prod mult-deriv))
+;C)
 (define (install-div-package)
   (define (dividend exp) (car exp))
   (define (divisor exp) (cdr exp))
@@ -1206,3 +1209,5 @@
                                                             (deriv (divisor exp) var))))
                    (make-product (divisor exp) (divisor exp))))
   (put 'deriv 'quot div-deriv))
+;D)
+;The order of arguments passed to put would need to be changed.
