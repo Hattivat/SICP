@@ -1241,4 +1241,14 @@
             (find-employee-record employee (cdr filelist))))))
 ;D)
 ;All employee files and employee records need to be tagged with the company division they work for. Methods
-;to access date need to be installed in the central table.
+;to access data need to be installed in the central table.
+
+;exercise 2.75
+(define (make-from-mag-ang-2 x y)
+  (define (dispatch op)
+    (cond ((eq? op 'real-part) (* x (cos y)))
+          ((eq? op 'imag-part) (* x (sin y)))
+          ((eq? op 'magnitude) x)
+          ((eq? op 'angle) y)
+          (else (error "Unknown op -- MAKE-FROM-MAG-ANG-2" op))))
+  dispatch)
