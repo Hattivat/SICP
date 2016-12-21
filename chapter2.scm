@@ -1211,3 +1211,34 @@
   (put 'deriv 'quot div-deriv))
 ;D)
 ;The order of arguments passed to put would need to be changed.
+
+;exercise 2.74
+;A)
+;The record can be structured in any way, as long as all of them provide the same primary key to identify employees
+;and every file begins with a tag identifying the company division it belongs to.
+(define (file-tag file) (car file))
+(define (get-record employee file)
+  (let ((division (file-tag file)))
+    (let ((empdata ((get 'get-record division) employee file)))
+      (if (null? empdata)
+          #f
+          empdata))))
+;B)
+;This requires that each individual employee record begins with a tag identifying the division he works in.
+(define (get-salary employee record)
+  (let ((division (file-tag record)))
+    (let ((empsalary ((get 'get-salary division) employee record)))
+      (if (null?? empsalary)
+          #f
+          empsalary))))
+;C)
+(define (find-employee-record employee filelist)
+  (if (null? filelist)
+      #f
+      (let ((currentrecord (get-record employee (car filelist))))
+        (if currentrecord
+            currentrecord
+            (find-employee-record employee (cdr filelist))))))
+;D)
+;All employee files and employee records need to be tagged with the company division they work for. Methods
+;to access date need to be installed in the central table.
