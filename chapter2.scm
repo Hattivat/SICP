@@ -1252,3 +1252,17 @@
           ((eq? op 'angle) y)
           (else (error "Unknown op -- MAKE-FROM-MAG-ANG-2" op))))
   dispatch)
+
+;exercise 2.76
+;Generic Operations style:
+;For a new type, new procedures need to be written, and intermediary layer procedures need to be changed
+;to make use of these new procedures. For a new operation, no change is needed.
+;Data-directed style:
+;For a new type, new procedures need to be written, put into a package and installed. For a new operation,
+;previously defined table and packages need to be modified and reinstalled.
+;Message-passing style:
+;For a new type, only one large new procedure needs to be written, everything else stays the same.
+;For a new operation, no change is needed.
+;;;;;;
+;For an organization which must add new types often, data-directed style is the best.
+;For an organization which must add new operations often, message-passing style is the better choice.
