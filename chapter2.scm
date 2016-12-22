@@ -1391,3 +1391,25 @@
   (cond ((pair? datum) (cdr datum))
         ((number? datum) datum)
         (else (error "Bad tagged datum -- CONTENTS" datum))))
+
+;exercise 2.79
+(define (equ? x y) (apply-generic 'equ? x y))
+(define (equ-rat x y)
+  (and (equ? (numer x) (numer y))
+       (equ? (denom x) (denom y))))
+(define (equ-comp x y)
+  (and (equ? (real-part x) (real-part y))
+       (equ? (imag-part x) (imag-part y))))
+(put 'equ? '(scheme-number scheme-number) =)
+(put 'equ? '(rational rational) equ-rat)
+(put 'equ? '(complex complex) equ-comp)
+
+;exercise 2.80
+(define (=zero? x) (apply-generic '=zero? x))
+(define (zero-scheme x) (lambda (x) (= x 0)))
+(define (zero-rat x) (lambda (x) (= (numer x) (denom x) 0)))
+(define (zero-comp x) (lambda (x) (= (real-part x) (imag-part x) 0)))
+(put '=zero? 'scheme-number zero-scheme)
+(put '=zero? 'rational zero-rat)
+(put '=zero? 'complex zero-comp)
+
