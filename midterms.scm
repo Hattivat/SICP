@@ -11,21 +11,28 @@
 ;scheme will print catdo, because the function "first" is passed a list with one element, so it selects this one element.
 (cons (list 1 2) (cons 3 4))
 ; scheme will print '((1 2) 3 . 4) and the box-and-pointer diagram would be:
-;[|][=]>[3][4]
-; v
-;[1][|]
+;[|][=]>[|][|]
+; v      V  V
+;[|][|]  3  4
+; V  v
+; 1 [|][/]
 ;    v
-;   [2]['()]
+;    2
 (let ((p (list 4 5)))
   (cons (cdr p) (cddr p)))
 ;scheme will print '((5)) and the box-and-pointer diagram would be:
-;[|]['()]
+;[|][/]
 ; v
-;[5]['()]
+;[|][/]
+; v
+; 5
 (cadadr '((a (b) c) (d (e) f) (g (h) i))
 ;error, lacks closing brace.
 )
-;after adding it, it will print '(e).
+;after adding it, it will print '(e), box-and-pointer:
+;[|][/]
+; v
+; e
 
 ;problem 2
 (define (foo n)
@@ -105,3 +112,107 @@
   (if (> (car time) 11)
       'pm
       'am))
+
+;sample exam 2
+
+;problem 1
+;(every (bf x) '(ab cd ef gh))
+;error, because x is not defined.
+(cond ('hello 5) (#t 6) (else 7))
+;Scheme prints 5, because all values count as true, and 'hello is the first one to be evaluated.
+;(let ((x 10)
+;      (y (+ x 2)))
+;  (* y 3))
+;Error because this would need nested "let"s, otherwise x in not bound.
+(cons (list '() '(b)) (append '(c) '(d)))
+;Scheme will print ((() (b)) c d). The box-and-pointer diagram would be:
+;[|][=]>[|][=]>[|][/]
+; |      v      v
+; V      c      d
+;[/][=]>[|][/]
+;        v
+;       [|][/]
+;        v
+;        b
+((lambda (x) (cons x x)) '(a))
+;Scheme will print '((a) a), and the box-and-pointer diagram would be:
+;[|][=]>a
+; V
+;[|][/]
+; v
+; a
+(cdar '((1 2) (3 4)))
+;Scheme will print '(2), box-and-pointer obviously:
+;[|][/]
+; v
+; 2
+
+;problem 2
+(define (garply n)
+  (if (< n 20)
+      n
+      (+ (foo n)
+         (garply (- n 1)))))
+;False. We can determine that the order of growth of garply is at least O(n), but it could be higher, depending on foo.
+;True, it is at a minimum O(n).
+;True, in this case it would be O(n^2).
+;Flase, garply does not generate an iterative process.
+
+;problem 3
+(define (mountain x) 'done)
+(define (dew) (dew))
+;the expression (mountain (dew)) in 'done in normal order and an infinite loop in applicative order.
+;the expression (mountain dew) will result in 'done in both normal and applicative orders.
+
+;problem 4
+(define (every-nth n sntc)
+  (define (inner x n sntc)
+    (cond ((empty? sntc) '())
+          ((= x 1) (se (first sntc) (inner n n (bf sntc))))
+          (else (inner (- x 1) n (bf sntc)))))
+  (inner n n sntc))
+
+;problem 5
+(define (differences sent)
+  (if (empty? (bf sent))
+      '()
+      (se (- (first sent) (first (bf sent)))
+          (differences (bf sent)))))
+(define (wordpairs sent)
+  (if (empty? (bf sent))
+      '()
+      (se (word (first sent) (first (bf sent)))
+          (wordpairs (bf sent)))))
+(define (pairmap sent op)
+  (if (empty? (bf sent))
+      '()
+      (se (op (first sent) (first (bf sent)))
+          (pairmap (bf sent) op))))
+(define (differences2 sent)
+  (pairmap sent -))
+(define (wordpairs2 sent)
+  (pairmap sent word))
+
+;problem 6
+(define (colors sockdrawer)
+  (define (remdup seq)
+    (cond ((null? seq) '())
+          ((memq (car seq) (cdr seq)) (remdup (cdr seq)))
+          (else (cons (car seq) (remdup (cdr seq))))))
+  (remdup sockdrawer))
+(define (howmany color sockdrawer)
+  (length (filter (lambda (sock) (eq? sock color)) sockdrawer)))
+(define (odd-sock? sockdrawer)
+  (define (inner)
+    (cond ((null? colors) #f)
+          ((odd? (howmany (car colors) sockdrawer)) #t)
+          (else (inner (cdr colors)))))
+  (inner (colors sockdrawer)))
+(define (colors-new sockdrawer)
+  (if (null? sockdrawer)
+      '()
+      (cons (caar sockdrawer) (colors-new (cdr sockdrawer)))))
+(define (howmany-new color sockdrawer)
+  (cond ((null? sockdrawer) 0)
+        ((equal? (caar sockdrawer) color) (cadar sockdrawer))
+        (else (howmany-new color (cdr sockdrawer)))))
