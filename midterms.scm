@@ -216,3 +216,76 @@
   (cond ((null? sockdrawer) 0)
         ((equal? (caar sockdrawer) color) (cadar sockdrawer))
         (else (howmany-new color (cdr sockdrawer)))))
+
+;sample exam 3
+
+;problem 1
+(first '(help!))
+;Scheme will print 'help!, because it is the first element of a one-element list.
+;((word 'but 'first) 'plop)
+;Error! 'butfirst is not a procedure.
+(let ((+ -)
+      (- +))
+  (- 8 2))
+;Scheme will print 10 because the (- +) operation is not in a nested let, but instead in the same let as (+ -).
+(list (append '(a b) '()) (cons '(a b) '(c)))
+;Scheme will print ((a b) ((ab) (c)). The box-and-pointer diagram would be:
+;[|][=]>[|][=]>[|][/]
+; v      v      v
+; v      v      c
+;[|][|] [|][=]>[|][/]
+; v  v   v      v
+; a  v   a      b
+;   [|][/]
+;    v
+;    b
+(filter (lambda (x) (if (list? x) (pair? x) (number? x)))
+        '(1 () (2 3) (so) what))
+;Scheme will print (1 (2 3) (so)). The box-and-pointer diagram would be:
+;[|][=]>[|][=]>[|][/]
+; v      v      v
+; 1     [|][|] [|][/]
+;        v  v   v
+;        2  v   so
+;          [|][/]
+;           v
+;           3
+(cddadr '((a b c d e) (f g h i j) (l m n o p) (q r s t u)))
+;Scheme will print '(h i j). Box-and-pointer diagram would be:
+;[|][=]>[|][=]>[|][/]
+; v      v      v
+; h      i      j
+
+;problem 2
+;C)O(n + n^2) is the precise answer, but B)O(n^2) is technically the same, just simplified.
+
+;problem 3
+(define (weird-rec x)
+  (if (= x 1)
+      0
+      (+ 1 (weird-rec (floor (/ x 2))))))
+(define (weird-iter x)
+  (define (inner x result)
+    (if (= x 1)
+        result
+        (inner (floor (/ x 2)) (+ result 1))))
+  (inner x 0))
+
+;problem 4
+;C) (* (random 10) (random 10)) in applicative order results in squaring (random 10), whereas in normal order
+;it results in multiplication of two different (random 10) results.
+;D) (random (square 10)) gives (random 100) in applicative order but error in normal order.
+
+;problem 5
+(define (mad-libs story)
+  (lambda (nouns adjectives)
+    (define (inner sto nou adj)
+      (cond ((empty? sto) '())
+            ((equal? (first sto) '*ADJECTIVE) (se (first adj) (inner (bf sto) nou (bf adj))))
+            ((equal? (first sto) '*NOUN) (se (first nou) (inner (bf sto) (bf nou) adj)))
+            (else (se (first sto) (inner (bf sto) nouns adj)))))
+    (inner story nouns adjectives)))
+(define my-story
+  (mad-libs '(It was a *ADJECTIVE and *ADJECTIVE *NOUN)))
+
+;problem 6
