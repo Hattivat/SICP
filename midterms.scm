@@ -289,3 +289,34 @@
   (mad-libs '(It was a *ADJECTIVE and *ADJECTIVE *NOUN)))
 
 ;problem 6
+(define (scrunch sent)
+  (if (empty? sent)
+      ""
+      (word (first sent) (scrunch (butfirst sent)))))
+(define (word-maker template)
+  (lambda (insert) (scrunch (map (lambda (x) (if (equal? x '*)
+                                        insert
+                                        x))
+                        template))))
+(define plural (word-maker '(* s)))
+(define past (word-maker '(* ed)))
+
+;problem 7
+(define make-association cons)
+(define association-key car)
+(define association-value cdr)
+(define (assoc key a-list)
+  (cond ((null? a-list) #f)
+        ((equal? key (association-key (car a-list))) (car a-list))
+        (else (assoc key (cdr a-list)))))
+(define (index groups)
+  (if (null? groups)
+      '()
+      (append (index-one (car groups)) (index (cdr groups)))))
+(define (index-one group)
+  (define (help groupname people)
+    (if (empty? people)
+        '()
+        (cons (make-association (first people) groupname)
+              (help groupname (bf people)))))
+  (help (association-key group) (association-value group)))
