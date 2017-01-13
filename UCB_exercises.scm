@@ -148,29 +148,6 @@
              (car alist)
              (find-nth find-nth (cdr alist) (- n 1)))))))
 
-(define (eval-1 exp)
-  (cond ((constant? exp) exp)
-	((symbol? exp) (eval exp))	; use underlying Scheme's EVAL
-	((quote-exp? exp) (cadr exp))
-	((if-exp? exp)
-	 (if (eval-1 (cadr exp))
-	     (eval-1 (caddr exp))
-	     (eval-1 (cadddr exp))))
-        ((and-exp? exp)
-         (if (eval-1 (cadr exp))
-             (eval-1 (caddr exp))
-             #f))
-        ((map-exp? exp)
-         
-	((lambda-exp? exp) exp)
-	((pair? exp) (apply-1 (eval-1 (car exp))      ; eval the operator
-			      (map eval-1 (cdr exp))))
-	(else (error "bad expr: " exp))))
-
-(define and-exp? (exp-checker 'and))
-
-(define map-exp? (exp-checker 'map))
-
 ;scheme-1 code from the course:
 (define (scheme-1)
   (display "Scheme-1: ")
@@ -223,3 +200,33 @@
 	((constant? value) value)
 	((procedure? value) value)	; real Scheme primitive procedure
 	(else (list 'quote value))))
+
+;week 6 cont.
+
+(define (eval-1 exp)
+  (cond ((constant? exp) exp)
+	((symbol? exp) (eval exp))	; use underlying Scheme's EVAL
+	((quote-exp? exp) (cadr exp))
+	((if-exp? exp)
+	 (if (eval-1 (cadr exp))
+	     (eval-1 (caddr exp))
+	     (eval-1 (cadddr exp))))
+        ((and-exp? exp)
+         (if (eval-1 (cadr exp))
+             (if (eval-1 (caddr exp))
+                 #t
+                 #f)
+             #f))
+        ((map-exp? exp)
+         (if (null? (cddr exp))
+             '()
+             (cons (eval-1 (cons (cadr exp) (caddr exp)))
+                   (eval-1 (cons (car exp) (cdddr exp))))))
+	((lambda-exp? exp) exp)
+	((pair? exp) (apply-1 (eval-1 (car exp))      ; eval the operator
+			      (map eval-1 (cdr exp))))
+	(else (error "bad expr: " exp))))
+
+(define and-exp? (exp-checker 'and))
+
+(define map-exp? (exp-checker 'map))
