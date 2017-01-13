@@ -132,3 +132,37 @@
           ((eqv? (first w) 'r) x)
           (else (display 'Error!))))
   (lambda (x) (inner w x)))
+
+;week 5
+(define (mystery L1 L2)
+  (append (cons L2 L1) L2))
+;the rest was exercises from chapter2, solved in the other file.
+
+;week 6
+(lambda (alist n)
+  ((lambda (find-nth) (find-nth find-nth alist n))
+   (lambda (find-nth alist n)
+     (if (null? alist)
+         '()
+         (if (= n 0)
+             (car alist)
+             (find-nth find-nth (cdr alist) (- n 1)))))))
+
+(define (eval-1 exp)
+  (cond ((constant? exp) exp)
+	((symbol? exp) (eval exp))	; use underlying Scheme's EVAL
+	((quote-exp? exp) (cadr exp))
+	((if-exp? exp)
+	 (if (eval-1 (cadr exp))
+	     (eval-1 (caddr exp))
+	     (eval-1 (cadddr exp))))
+        ((and-exp? exp)
+         (if (eval-1 (cadr exp))
+             (eval-1 (caddr exp))
+             #f))
+	((lambda-exp? exp) exp)
+	((pair? exp) (apply-1 (eval-1 (car exp))      ; eval the operator
+			      (map eval-1 (cdr exp))))
+	(else (error "bad expr: " exp))))
+
+(define and-exp? (exp-checker 'and))
