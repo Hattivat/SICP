@@ -213,15 +213,12 @@
 	     (eval-1 (cadddr exp))))
         ((and-exp? exp)
          (if (eval-1 (cadr exp))
-             (if (eval-1 (caddr exp))
+             (if (eval-1 (cdaddr exp))
                  #t
                  #f)
              #f))
         ((map-exp? exp)
-         (if (null? (cddr exp))
-             '()
-             (cons (eval-1 (cons (cadr exp) (caddr exp)))
-                   (eval-1 (cons (car exp) (cdddr exp))))))
+         (map-1 (cadr exp) (car (cdaddr exp))))
 	((lambda-exp? exp) exp)
 	((pair? exp) (apply-1 (eval-1 (car exp))      ; eval the operator
 			      (map eval-1 (cdr exp))))
@@ -230,3 +227,8 @@
 (define and-exp? (exp-checker 'and))
 
 (define map-exp? (exp-checker 'map))
+
+(define (map-1 func args)
+  (if (null? args)
+      '()
+      (cons (eval-1 (list func (car args))) (map-1 func (cdr args)))))
