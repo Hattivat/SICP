@@ -240,7 +240,7 @@
 (define (let-1 exp)
   	 (eval-1 (substitute (caddr exp)
                 (map car (cadr exp))
-                (map eval-1 (map car (map cdr (cadr exp))))
+                (map (lambda (x) (eval-1 (cadr x))) (cadr exp))
                 '())))
 
 ((lambda (x y) (let ((z (* x y))(v (+ x y))) (+ z v))) 2 4)
