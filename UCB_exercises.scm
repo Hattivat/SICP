@@ -238,4 +238,9 @@
       (cons (eval-1 (list func (car args))) (map-1 func (cdr args)))))
 
 (define (let-1 exp)
-  (
+  	 (eval-1 (substitute (caddr exp)
+                (map car (cadr exp))
+                (map eval-1 (map car (map cdr (cadr exp))))
+                '())))
+
+((lambda (x y) (let ((z (* x y))(v (+ x y))) (+ z v))) 2 4)
