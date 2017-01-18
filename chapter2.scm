@@ -1396,6 +1396,7 @@
         ((number? datum) datum)
         (else (error "Bad tagged datum -- CONTENTS" datum))))
 
+(define (install-blah-blah)
 ;exercise 2.79
 (define (equ? x y) (apply-generic 'equ? x y))
 (define (equ-rat x y)
@@ -1406,8 +1407,9 @@
        (equ? (imag-part x) (imag-part y))))
 (put 'equ? '(scheme-number scheme-number) =)
 (put 'equ? '(rational rational) equ-rat)
-(put 'equ? '(complex complex) equ-comp)
+(put 'equ? '(complex complex) equ-comp))
 
+(define (install-blih-blih)
 ;exercise 2.80
 (define (=zero? x) (apply-generic '=zero? x))
 (define (zero-scheme x) (lambda (x) (= x 0)))
@@ -1415,5 +1417,10 @@
 (define (zero-comp x) (lambda (x) (= (real-part x) (imag-part x) 0)))
 (put '=zero? 'scheme-number zero-scheme)
 (put '=zero? 'rational zero-rat)
-(put '=zero? 'complex zero-comp)
+(put '=zero? 'complex zero-comp))
+
+(define (install-more-sicp-code)
+  (define (scheme-number->complex n)
+    (make-complex-from-real-imag (contents n) 0))
+  (put-coercion 'scheme-number 'complex scheme-number->complex))
 
