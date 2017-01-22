@@ -1455,7 +1455,7 @@
         (else #f)))
 (define (can-coerce? type)
   (lambda (t)
-    (if (get-coercion type t)
+    (if (or (get-coercion type t) (equal? type t))
         #t
         #f)))
 (define (find-common-denominator tags)
