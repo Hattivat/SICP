@@ -1447,3 +1447,33 @@
                                     (list op type-tags))))))
               (error "No method for these types"
                      (list op type-tags))))))))
+
+;exercise 2.82
+(define (and-map op values)
+  (cond ((empty? values) #t)
+        ((op (car values)) (and-map op (cdr values)))
+        (else #f)))
+(define (can-coerce? type)
+  (lambda (t)
+    (if (get-coercion type t)
+        #t
+        #f)))
+(define (find-common-denominator tags)
+  (define (inner checked checking tocheck)
+    (cond ((and-map (can-coerce? checking) (append checked tocheck)) checking)
+          ((empty? tocheck) (error "no coercion possible for these types" tags))
+          (else (inner (cons checking checked) (car tocheck) (cdr tocheck)))))
+  (inner '() (car tags) (cdr tags)))
+(define (multi-coerce coerceto args)
+  (define (inner coerceto args result)
+    (if (empty? args)
+        result
+        (inner coercoto
+               (cdr args)
+               (cons ((get-coercion coerceto (caar args)) cdar args) result))))
+  (inner coerceto args '()))
+(define (apply-generic-mul op . args)
+  (let ((type-tags (map type-tag args)))
+    (let ((com-dem (find-common-denominator type-tags)))
+      (let ((coerced-args (multi-coerce com-dem args)))
+        (apply-generic op coerced-args)))))
