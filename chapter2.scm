@@ -1477,3 +1477,12 @@
     (let ((com-dem (find-common-denominator type-tags)))
       (let ((coerced-args (multi-coerce com-dem args)))
         (apply-generic op coerced-args)))))
+
+;exercise 2.83
+(define (raise nr)
+  (let ((tag (type-tag nr))
+        (x (cdr nr)))
+    (cond ((equ? tag 'scheme-number) (make-rational x 1))
+          ((equ? tag 'rational) (make-real (/ (number x) (denom x))))
+          ((equ? tag 'real) (make-complex-from-real-imag (cdr x) 0))
+          (else nr))))
