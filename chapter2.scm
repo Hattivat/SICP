@@ -1482,7 +1482,7 @@
 (define (install-even-more-code)
   (put 'raise 'scheme-number (lambda (x) (make-rational x 1)))
   (put 'raise 'rational (lambda (x) (make-real (/ (number x) (denom x)))))
-  (put 'raise 'real (lambda (x) (make-complex-from-real-imag x 0)))
+  (put 'raise 'real (lambda (x) (make-complex-from-real-imag x 0))))
 (define (raise nr)
   (apply-generic 'raise nr))
 
