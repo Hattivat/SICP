@@ -1646,4 +1646,12 @@
 (define (order term) (car term))
 (define (coeff term) (cadr term))
 
+(define (make-polynomial var terms)
+  ((get 'make 'polynomial) var terms))
+
+(define (install-polynomial-package-2)
 ;exercise 2.87
+(put '=zero? 'polynomial (lambda (x) (andmap (lambda (y) (=zero? y)) (map coeff x))))
+
+;exercise 2.88
+(put 'sub 'polynomial (lambda (x) 
