@@ -1554,22 +1554,6 @@
 (define (make-for-real-imag x y)
   (make-from-mag-ang (sq-root (add (square x) (square y)) (arctan y x))))
 
-(define (add-poly p1 p2)
-  (if (same-variable? (variable p1) (variable p2))
-      (make-poly (variable p1)
-                 (add-terms (term-list p1)
-                            (term-list p2)))
-      (error "Polys not in same var -- ADD-POLY"
-             (list p1 p2))))
-
-(define (mul-poly p1 p2)
-  (if (same-variable? (variable p1) (variable p2))
-      (make-poly (variable p1)
-                 (mul-terms (term-list p1)
-                            (term-list p2)))
-      (error "Polys not in same var -- MUL-POLY"
-             (list p1 p2))))
-
 (define (install-polynomial-package)
   ;; internal procedures
   ;; representation of poly
@@ -1584,9 +1568,21 @@
 
   ;; continued on next page
 
-  (define (add-poly p1 p2) ...)
+  (define (add-poly p1 p2)
+    (if (same-variable? (variable p1) (variable p2))
+      (make-poly (variable p1)
+                 (add-terms (term-list p1)
+                            (term-list p2)))
+      (error "Polys not in same var -- ADD-POLY"
+             (list p1 p2))))
   ;procedures used by add-poly
-  (define (mul-poly p1 p2) ...)
+  (define (mul-poly p1 p2)
+    (if (same-variable? (variable p1) (variable p2))
+      (make-poly (variable p1)
+                 (mul-terms (term-list p1)
+                            (term-list p2)))
+      (error "Polys not in same var -- MUL-POLY"
+             (list p1 p2))))
   ;procedures used by mul-poly
 
   ;; interface to rest of the system
@@ -1654,4 +1650,41 @@
 (put '=zero? 'polynomial (lambda (x) (andmap (lambda (y) (=zero? y)) (map coeff x))))
 
 ;exercise 2.88
-(put 'sub 'polynomial (lambda (x) 
+(define (negate-poly p)
+  (make-poly (variable p) (mul-term (term-list p) '((0 -1)))))
+(put 'sub 'polynomial (lambda (x y) (add-poly x (negate-poly y))))
+
+;exercise 2.89
+(define (add-terms-dense L1 L2)
+  (cond ((empty-termlist? L1) L2)
+        ((empty-termlist? L2) L1)
+        (else
+         (let ((t1 (first-term L1)) (t2 (first-term L2)))
+           (cond ((> (length L1) (length L2))
+                  (adjoin-term-dense
+                   t1 (add-terms-dense (rest-terms L1) L2)))
+                 ((< (length L1) (length L2))
+                  (adjoin-term-dense
+                   t2 (add-terms-dense L1 (rest-terms L2))))
+                 (else
+                  (adjoin-term-dense (add t1 t2)
+                                     (add-terms-dense (rest-terms L1)
+                                                      (rest-terms L2)))))))))
+(define (adjoin-term-dense term term-list)
+  (if (=zero? term)
+      term-list
+      (cons term term-list)))
+(define (mul-terms-dense L1 L2)
+  (if (empty-termlist? L1)
+      (the-empty-termlist)
+      (add-terms-dense (mul-term-by-all-dense L1 L2)
+                       (mul-terms-dense (rest-terms L1) L2))))
+(define (mul-term-by-all-dense L1 L2)
+  (if (empty-termlist? L2)
+      (the-empty-termlist)
+      (let ((t1 (first-term L1))
+            (t2 (first-term L2)))
+        (adjoin-term-dense
+         (make-term (+ (order t1) (order t2))
+                    (mul (coeff t1) (coeff t2)))
+         (mul-term-by-all-dense L1 (rest-terms L2))))))
