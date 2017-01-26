@@ -1655,36 +1655,8 @@
 (put 'sub 'polynomial (lambda (x y) (add-poly x (negate-poly y))))
 
 ;exercise 2.89
-(define (add-terms-dense L1 L2)
-  (cond ((empty-termlist? L1) L2)
-        ((empty-termlist? L2) L1)
-        (else
-         (let ((t1 (first-term L1)) (t2 (first-term L2)))
-           (cond ((> (length L1) (length L2))
-                  (adjoin-term-dense
-                   t1 (add-terms-dense (rest-terms L1) L2)))
-                 ((< (length L1) (length L2))
-                  (adjoin-term-dense
-                   t2 (add-terms-dense L1 (rest-terms L2))))
-                 (else
-                  (adjoin-term-dense (add t1 t2)
-                                     (add-terms-dense (rest-terms L1)
-                                                      (rest-terms L2)))))))))
+(define (first-term-dense term-list) (make-term (- (len term-list) 1) (car term-list)))
 (define (adjoin-term-dense term term-list)
-  (if (=zero? term)
-      term-list
-      (cons term term-list)))
-(define (mul-terms-dense L1 L2)
-  (if (empty-termlist? L1)
-      (the-empty-termlist)
-      (add-terms-dense (mul-term-by-all-dense L1 L2)
-                       (mul-terms-dense (rest-terms L1) L2))))
-(define (mul-term-by-all-dense L1 L2)
-  (if (empty-termlist? L2)
-      (the-empty-termlist)
-      (let ((t1 (first-term L1))
-            (t2 (first-term L2)))
-        (adjoin-term-dense
-         (make-term (+ (order t1) (order t2))
-                    (mul (coeff t1) (coeff t2)))
-         (mul-term-by-all-dense L1 (rest-terms L2))))))
+  (cond ((=zero? term) term-list)
+        ((=equ? (order term) (length term-list)) (cons (coeff term) term-list))
+        (else (adjoin-term-dense term (cons 0 term-list)))))
