@@ -1777,3 +1777,10 @@
       (make-poly (variable p1)
                  (div-terms (term-list p1) (term-list p2)))
       (error "Polys not in same var -- DIV-POLY" (list p1 p2))))
+
+;exercise 2.92
+"By imposing an ordering on variables, extend the polynomial package so that addition
+and multiplication of polynomials works for polynomials in different variables."
+;TODO: write hundreds of lines of code for a branch of mathematics that I'm not too familiar with.
+
+;exercise 2.93
